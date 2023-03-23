@@ -1,0 +1,629 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "EHR Data Authority",
+    "description": "OpenAPI 3.0 specification for the EHR Data Authority",
+    "contact": {
+      "name": "Josh Smith",
+      "email": "josh@projectronin.com",
+      "url": "https://github.com/projectronin/contract-rest-emr-api"
+    },
+    "version": "1.0.0-SNAPSHOT"
+  },
+  "servers": [
+    {
+      "url": "/api"
+    }
+  ],
+  "tags": [
+    {
+      "name": "resources",
+      "description": "Relating to FHIR resources"
+    }
+  ],
+  "paths": {
+    "/resources": {
+      "post": {
+        "tags": [
+          "resources"
+        ],
+        "summary": "Adds or updates the supplied resource",
+        "description": "Adds or updates the supplied resource",
+        "operationId": "addResource",
+        "requestBody": {
+          "description": "The resource to add or update in the EHR Data Authority",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Resource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "modificationType": {
+                      "$ref": "#/components/schemas/ModificationType"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An error occurred while attempting to add the resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/resources/batch": {
+      "post": {
+        "tags": [
+          "resources"
+        ],
+        "summary": "Adds or updates the supplied resources",
+        "description": "Adds of updates the supplied resources. A maximum of 25 resources are allowed in a single request.",
+        "operationId": "addResources",
+        "requestBody": {
+          "description": "The resources to add or update in the EHR Data Authority",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Resource"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request processed successfully. Consult the response for individual resource success and failure details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchResourceResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An error occurred while attempting to add the resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Resource": {
+        "type": "object",
+        "oneOf": [
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Account-v1.schema.json#/definitions/Account"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/ActivityDefinition-v1.schema.json#/definitions/ActivityDefinition"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/AdverseEvent-v1.schema.json#/definitions/AdverseEvent"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/AllergyIntolerance-v1.schema.json#/definitions/AllergyIntolerance"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Appointment-v1.schema.json#/definitions/Appointment"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/AppointmentResponse-v1.schema.json#/definitions/AppointmentResponse"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/AuditEvent-v1.schema.json#/definitions/AuditEvent"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Basic-v1.schema.json#/definitions/Basic"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Binary-v1.schema.json#/definitions/Binary"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/BiologicallyDerivedProduct-v1.schema.json#/definitions/BiologicallyDerivedProduct"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/BodyStructure-v1.schema.json#/definitions/BodyStructure"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Bundle-v1.schema.json#/definitions/Bundle"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/CapabilityStatement-v1.schema.json#/definitions/CapabilityStatement"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/CarePlan-v1.schema.json#/definitions/CarePlan"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/CareTeam-v1.schema.json#/definitions/CareTeam"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/CatalogEntry-v1.schema.json#/definitions/CatalogEntry"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/ChargeItem-v1.schema.json#/definitions/ChargeItem"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/ChargeItemDefinition-v1.schema.json#/definitions/ChargeItemDefinition"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Claim-v1.schema.json#/definitions/Claim"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/ClaimResponse-v1.schema.json#/definitions/ClaimResponse"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/ClinicalImpression-v1.schema.json#/definitions/ClinicalImpression"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/CodeSystem-v1.schema.json#/definitions/CodeSystem"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Communication-v1.schema.json#/definitions/Communication"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/CommunicationRequest-v1.schema.json#/definitions/CommunicationRequest"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/CompartmentDefinition-v1.schema.json#/definitions/CompartmentDefinition"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Composition-v1.schema.json#/definitions/Composition"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/ConceptMap-v1.schema.json#/definitions/ConceptMap"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Condition-v1.schema.json#/definitions/Condition"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Consent-v1.schema.json#/definitions/Consent"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Contract-v1.schema.json#/definitions/Contract"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Coverage-v1.schema.json#/definitions/Coverage"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/CoverageEligibilityRequest-v1.schema.json#/definitions/CoverageEligibilityRequest"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/CoverageEligibilityResponse-v1.schema.json#/definitions/CoverageEligibilityResponse"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/DetectedIssue-v1.schema.json#/definitions/DetectedIssue"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Device-v1.schema.json#/definitions/Device"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/DeviceDefinition-v1.schema.json#/definitions/DeviceDefinition"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/DeviceMetric-v1.schema.json#/definitions/DeviceMetric"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/DeviceRequest-v1.schema.json#/definitions/DeviceRequest"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/DeviceUseStatement-v1.schema.json#/definitions/DeviceUseStatement"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/DiagnosticReport-v1.schema.json#/definitions/DiagnosticReport"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/DocumentManifest-v1.schema.json#/definitions/DocumentManifest"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/DocumentReference-v1.schema.json#/definitions/DocumentReference"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/EffectEvidenceSynthesis-v1.schema.json#/definitions/EffectEvidenceSynthesis"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Encounter-v1.schema.json#/definitions/Encounter"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Endpoint-v1.schema.json#/definitions/Endpoint"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/EnrollmentRequest-v1.schema.json#/definitions/EnrollmentRequest"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/EnrollmentResponse-v1.schema.json#/definitions/EnrollmentResponse"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/EpisodeOfCare-v1.schema.json#/definitions/EpisodeOfCare"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/EventDefinition-v1.schema.json#/definitions/EventDefinition"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Evidence-v1.schema.json#/definitions/Evidence"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/EvidenceVariable-v1.schema.json#/definitions/EvidenceVariable"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/ExampleScenario-v1.schema.json#/definitions/ExampleScenario"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/ExplanationOfBenefit-v1.schema.json#/definitions/ExplanationOfBenefit"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/FamilyMemberHistory-v1.schema.json#/definitions/FamilyMemberHistory"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Flag-v1.schema.json#/definitions/Flag"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Goal-v1.schema.json#/definitions/Goal"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/GraphDefinition-v1.schema.json#/definitions/GraphDefinition"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Group-v1.schema.json#/definitions/Group"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/GuidanceResponse-v1.schema.json#/definitions/GuidanceResponse"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/HealthcareService-v1.schema.json#/definitions/HealthcareService"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/ImagingStudy-v1.schema.json#/definitions/ImagingStudy"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Immunization-v1.schema.json#/definitions/Immunization"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/ImmunizationEvaluation-v1.schema.json#/definitions/ImmunizationEvaluation"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/ImmunizationRecommendation-v1.schema.json#/definitions/ImmunizationRecommendation"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/ImplementationGuide-v1.schema.json#/definitions/ImplementationGuide"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/InsurancePlan-v1.schema.json#/definitions/InsurancePlan"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Invoice-v1.schema.json#/definitions/Invoice"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Library-v1.schema.json#/definitions/Library"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Linkage-v1.schema.json#/definitions/Linkage"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/List-v1.schema.json#/definitions/List"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Location-v1.schema.json#/definitions/Location"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Measure-v1.schema.json#/definitions/Measure"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/MeasureReport-v1.schema.json#/definitions/MeasureReport"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Media-v1.schema.json#/definitions/Media"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Medication-v1.schema.json#/definitions/Medication"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/MedicationAdministration-v1.schema.json#/definitions/MedicationAdministration"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/MedicationDispense-v1.schema.json#/definitions/MedicationDispense"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/MedicationKnowledge-v1.schema.json#/definitions/MedicationKnowledge"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/MedicationRequest-v1.schema.json#/definitions/MedicationRequest"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/MedicationStatement-v1.schema.json#/definitions/MedicationStatement"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/MedicinalProduct-v1.schema.json#/definitions/MedicinalProduct"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/MedicinalProductAuthorization-v1.schema.json#/definitions/MedicinalProductAuthorization"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/MedicinalProductContraindication-v1.schema.json#/definitions/MedicinalProductContraindication"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/MedicinalProductIndication-v1.schema.json#/definitions/MedicinalProductIndication"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/MedicinalProductIngredient-v1.schema.json#/definitions/MedicinalProductIngredient"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/MedicinalProductInteraction-v1.schema.json#/definitions/MedicinalProductInteraction"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/MedicinalProductManufactured-v1.schema.json#/definitions/MedicinalProductManufactured"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/MedicinalProductPackaged-v1.schema.json#/definitions/MedicinalProductPackaged"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/MedicinalProductPharmaceutical-v1.schema.json#/definitions/MedicinalProductPharmaceutical"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/MedicinalProductUndesirableEffect-v1.schema.json#/definitions/MedicinalProductUndesirableEffect"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/MessageDefinition-v1.schema.json#/definitions/MessageDefinition"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/MessageHeader-v1.schema.json#/definitions/MessageHeader"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/MolecularSequence-v1.schema.json#/definitions/MolecularSequence"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/NamingSystem-v1.schema.json#/definitions/NamingSystem"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/NutritionOrder-v1.schema.json#/definitions/NutritionOrder"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Observation-v1.schema.json#/definitions/Observation"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/ObservationDefinition-v1.schema.json#/definitions/ObservationDefinition"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/OperationDefinition-v1.schema.json#/definitions/OperationDefinition"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/OperationOutcome-v1.schema.json#/definitions/OperationOutcome"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Organization-v1.schema.json#/definitions/Organization"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/OrganizationAffiliation-v1.schema.json#/definitions/OrganizationAffiliation"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Parameters-v1.schema.json#/definitions/Parameters"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Patient-v1.schema.json#/definitions/Patient"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/PaymentNotice-v1.schema.json#/definitions/PaymentNotice"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/PaymentReconciliation-v1.schema.json#/definitions/PaymentReconciliation"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Person-v1.schema.json#/definitions/Person"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/PlanDefinition-v1.schema.json#/definitions/PlanDefinition"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Practitioner-v1.schema.json#/definitions/Practitioner"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/PractitionerRole-v1.schema.json#/definitions/PractitionerRole"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Procedure-v1.schema.json#/definitions/Procedure"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Provenance-v1.schema.json#/definitions/Provenance"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Questionnaire-v1.schema.json#/definitions/Questionnaire"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/QuestionnaireResponse-v1.schema.json#/definitions/QuestionnaireResponse"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/RelatedPerson-v1.schema.json#/definitions/RelatedPerson"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/RequestGroup-v1.schema.json#/definitions/RequestGroup"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/ResearchDefinition-v1.schema.json#/definitions/ResearchDefinition"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/ResearchElementDefinition-v1.schema.json#/definitions/ResearchElementDefinition"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/ResearchStudy-v1.schema.json#/definitions/ResearchStudy"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/ResearchSubject-v1.schema.json#/definitions/ResearchSubject"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/RiskAssessment-v1.schema.json#/definitions/RiskAssessment"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/RiskEvidenceSynthesis-v1.schema.json#/definitions/RiskEvidenceSynthesis"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Schedule-v1.schema.json#/definitions/Schedule"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/SearchParameter-v1.schema.json#/definitions/SearchParameter"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/ServiceRequest-v1.schema.json#/definitions/ServiceRequest"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Slot-v1.schema.json#/definitions/Slot"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Specimen-v1.schema.json#/definitions/Specimen"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/SpecimenDefinition-v1.schema.json#/definitions/SpecimenDefinition"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/StructureDefinition-v1.schema.json#/definitions/StructureDefinition"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/StructureMap-v1.schema.json#/definitions/StructureMap"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Subscription-v1.schema.json#/definitions/Subscription"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Substance-v1.schema.json#/definitions/Substance"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/SubstanceNucleicAcid-v1.schema.json#/definitions/SubstanceNucleicAcid"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/SubstancePolymer-v1.schema.json#/definitions/SubstancePolymer"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/SubstanceProtein-v1.schema.json#/definitions/SubstanceProtein"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/SubstanceReferenceInformation-v1.schema.json#/definitions/SubstanceReferenceInformation"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/SubstanceSourceMaterial-v1.schema.json#/definitions/SubstanceSourceMaterial"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/SubstanceSpecification-v1.schema.json#/definitions/SubstanceSpecification"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/SupplyDelivery-v1.schema.json#/definitions/SupplyDelivery"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/SupplyRequest-v1.schema.json#/definitions/SupplyRequest"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/Task-v1.schema.json#/definitions/Task"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/TerminologyCapabilities-v1.schema.json#/definitions/TerminologyCapabilities"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/TestReport-v1.schema.json#/definitions/TestReport"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/TestScript-v1.schema.json#/definitions/TestScript"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/ValueSet-v1.schema.json#/definitions/ValueSet"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/VerificationResult-v1.schema.json#/definitions/VerificationResult"
+          },
+          {
+            "$ref": ".dependencies/common-fhir-r4-models/schema/v1/VisionPrescription-v1.schema.json#/definitions/VisionPrescription"
+          }
+        ]
+      },
+      "ModificationType": {
+        "type": "string",
+        "enum": [
+          "CREATED",
+          "UPDATED",
+          "UNMODIFIED"
+        ],
+        "description": "The type of modification that was performed. UNMODIFIED indicates that the data matched what was already in the EHR Data Authority, and it was thus unmodified"
+      },
+      "BatchResourceResponse": {
+        "type": "object",
+        "properties": {
+          "succeeded": {
+            "description": "The List of resources that were successfully processed by the server",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "resourceType": {
+                  "type": "string",
+                  "description": "The type of the resource"
+                },
+                "resourceId": {
+                  "type": "string",
+                  "description": "The ID of the resource"
+                },
+                "modificationType": {
+                  "$ref": "#/components/schemas/ModificationType"
+                }
+              }
+            }
+          },
+          "failed": {
+            "description": "The List of resources that failed to be added to the EHR Data Authority",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "resourceType": {
+                  "type": "string",
+                  "description": "The type of the resource"
+                },
+                "resourceId": {
+                  "type": "string",
+                  "description": "The ID of the resource"
+                },
+                "error": {
+                  "type": "string",
+                  "description": "Textual representation of the error that prevented this resource from being added to the EHR Data Authority"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "errorMessage": {
+            "type": "string",
+            "description": "The error message describing the failure"
+          }
+        }
+      }
+    }
+  }
+}
