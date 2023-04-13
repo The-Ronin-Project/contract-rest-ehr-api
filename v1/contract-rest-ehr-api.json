@@ -113,6 +113,132 @@
           }
         }
       }
+    },
+    "/tenants/{tenantMnemonic}/resources/{resourceType}/{udpId}": {
+      "get": {
+        "tags": [
+          "resources"
+        ],
+        "parameters": [
+            {
+            "name": "udpId",
+            "in": "path",
+            "description": "UDP Id of resource to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tenantMnemonic",
+            "in": "path",
+            "description": "The mnemonic that identifies the tenant",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "resourceType",
+            "in": "path",
+            "description": "The resource type to search for, can be any resource",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "summary": "Returns a resource",
+        "description": "Returns the resource defined by the given UDP Id",
+        "operationId": "getResource",
+        "responses": {
+          "200": {
+            "description": "Request processed successfully, resource returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Resource"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An error occurred while attempting to get the resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tenants/{tenantMnemonic}/resources/{resourceType}/identifiers/{identifier}": {
+      "get": {
+        "tags": [
+          "resources"
+        ],
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "description": "Array of identifiers used to search for resources.  Identifiers in the format 'system|value'.",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            }
+          },
+          {
+            "name": "resourceType",
+            "in": "path",
+            "description": "The resource type to search for",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/IdentifierSearchableResourceTypes"
+            }
+          },
+          {
+            "name": "tenantMnemonic",
+            "in": "path",
+            "description": "The mnemonic that identifies the tenant",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "summary": "Returns a list of identifiers",
+        "description": "Returns all identifiers tied to a resource indicated by the given identifier",
+        "operationId": "getResourceIdentifiers",
+        "responses": {
+          "200": {
+            "description": "Request processed successfully, identifiers returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdentifierSearchResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An error occurred while attempting to find the identifiers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -621,6 +747,59 @@
           "errorMessage": {
             "type": "string",
             "description": "The error message describing the failure"
+          }
+        }
+      },
+      "Identifier": {
+        "type": "object",
+        "properties": {
+          "system": {
+            "type": "string",
+            "description": "The system of the identifier"
+          },
+          "value": {
+            "type": "string",
+            "description": "The value of the identifier"
+          }
+        }
+      },
+      "IdentifierSearchableResourceTypes": {
+        "type": "string",
+        "enum": [
+          "Patient",
+          "Location",
+          "Practitioner"
+        ],
+        "description": "A list of resource types that can be searched for by identifier"
+      },
+      "IdentifierSearchResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "searchedIdentifier": {
+              "$ref": "#/components/schemas/Identifier",
+              "description": "The original identifier searched that identified the resource"
+            },
+            "foundResources": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "udpId": {
+                    "type": "string",
+                    "description": "The UDP ID of the found resource"
+                  },
+                  "identifiers": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Identifier"
+                    },
+                    "description": "The list of identifiers belonging to the found resource"
+                  }
+                }
+              }
+            }
           }
         }
       }
