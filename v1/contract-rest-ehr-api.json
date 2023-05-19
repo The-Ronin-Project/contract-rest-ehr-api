@@ -27,53 +27,6 @@
         "tags": [
           "resources"
         ],
-        "summary": "Adds or updates the supplied resource",
-        "description": "Adds or updates the supplied resource",
-        "operationId": "addResource",
-        "requestBody": {
-          "description": "The resource to add or update in the EHR Data Authority",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Resource"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "modificationType": {
-                      "$ref": "#/components/schemas/ModificationType"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An error occurred while attempting to add the resource",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/resources/batch": {
-      "post": {
-        "tags": [
-          "resources"
-        ],
         "summary": "Adds or updates the supplied resources",
         "description": "Adds of updates the supplied resources. A maximum of 25 resources are allowed in a single request.",
         "operationId": "addResources",
@@ -97,16 +50,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/BatchResourceResponse"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An error occurred while attempting to add the resource",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -702,51 +645,48 @@
             "description": "The List of resources that were successfully processed by the server",
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "resourceType": {
-                  "type": "string",
-                  "description": "The type of the resource"
-                },
-                "resourceId": {
-                  "type": "string",
-                  "description": "The ID of the resource"
-                },
-                "modificationType": {
-                  "$ref": "#/components/schemas/ModificationType"
-                }
-              }
+              "$ref": "#/components/schemas/SucceededResource"
             }
           },
           "failed": {
             "description": "The List of resources that failed to be added to the EHR Data Authority",
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "resourceType": {
-                  "type": "string",
-                  "description": "The type of the resource"
-                },
-                "resourceId": {
-                  "type": "string",
-                  "description": "The ID of the resource"
-                },
-                "error": {
-                  "type": "string",
-                  "description": "Textual representation of the error that prevented this resource from being added to the EHR Data Authority"
-                }
-              }
+              "$ref": "#/components/schemas/FailedResource"
             }
           }
         }
       },
-      "ErrorResponse": {
+      "FailedResource": {
         "type": "object",
         "properties": {
-          "errorMessage": {
+          "resourceType": {
             "type": "string",
-            "description": "The error message describing the failure"
+            "description": "The type of the resource"
+          },
+          "resourceId": {
+            "type": "string",
+            "description": "The ID of the resource"
+          },
+          "error": {
+            "type": "string",
+            "description": "Textual representation of the error that prevented this resource from being added to the EHR Data Authority"
+          }
+        }
+      },
+      "SucceededResource": {
+        "type": "object",
+        "properties": {
+          "resourceType": {
+            "type": "string",
+            "description": "The type of the resource"
+          },
+          "resourceId": {
+            "type": "string",
+            "description": "The ID of the resource"
+          },
+          "modificationType": {
+            "$ref": "#/components/schemas/ModificationType"
           }
         }
       },
