@@ -22,7 +22,7 @@
     }
   ],
   "paths": {
-    "/resources": {
+    "/tenants/{tenantId}/resources": {
       "post": {
         "tags": [
           "resources"
@@ -30,6 +30,22 @@
         "summary": "Adds or updates the supplied resources",
         "description": "Adds of updates the supplied resources. A maximum of 25 resources are allowed in a single request.",
         "operationId": "addResources",
+        "security": {
+          "auth0": [
+            "create:resources"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "tenantId",
+            "in": "path",
+            "description": "The ID of the tenant for which to add resources",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "description": "The resources to add or update in the EHR Data Authority",
           "content": {
@@ -57,25 +73,24 @@
         }
       }
     },
-    "/tenants/{tenantMnemonic}/resources/{resourceType}/{udpId}": {
+    "/tenants/{tenantId}/resources/{resourceType}/{udpId}": {
       "get": {
         "tags": [
           "resources"
         ],
+        "summary": "Returns a resource",
+        "description": "Returns the resource defined by the given UDP Id",
+        "operationId": "getResource",
+        "security": {
+          "auth0": [
+            "search:resources"
+          ]
+        },
         "parameters": [
-            {
-            "name": "udpId",
-            "in": "path",
-            "description": "UDP Id of resource to return",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
-            "name": "tenantMnemonic",
+            "name": "tenantId",
             "in": "path",
-            "description": "The mnemonic that identifies the tenant",
+            "description": "The ID of the tenant for which to retrieve resources",
             "required": true,
             "schema": {
               "type": "string"
@@ -89,11 +104,17 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "udpId",
+            "in": "path",
+            "description": "UDP Id of resource to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
-        "summary": "Returns a resource",
-        "description": "Returns the resource defined by the given UDP Id",
-        "operationId": "getResource",
         "responses": {
           "200": {
             "description": "Request processed successfully, resource returned",
@@ -104,37 +125,78 @@
                 }
               }
             }
-          },
-          "default": {
-            "description": "An error occurred while attempting to get the resource",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "resources"
+        ],
+        "summary": "Deletes the provided resource",
+        "description": "Deletes the provided resource from the EHR Data Authority. This will only work for test tenants.",
+        "operationId": "deleteResource",
+        "security": {
+          "auth0": [
+            "delete:resources"
+          ]
+        },
+        "parameters": [
+          {
+            "name": "tenantId",
+            "in": "path",
+            "description": "The ID of the tenant for which to delete a resource",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
+          },
+          {
+            "name": "resourceType",
+            "in": "path",
+            "description": "The resource type to delete",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "udpId",
+            "in": "path",
+            "description": "UDP Id of resource to delete",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request processed successfully, resource deleted"
           }
         }
       }
     },
-    "/tenants/{tenantMnemonic}/resources/{resourceType}/identifiers/{identifier}": {
+    "/tenants/{tenantId}/resources/{resourceType}/identifiers": {
       "get": {
         "tags": [
           "resources"
         ],
+        "summary": "Returns a list of identifiers",
+        "description": "Returns all identifiers tied to a resource indicated by the given identifier",
+        "operationId": "getResourceIdentifiers",
+        "security": {
+          "auth0": [
+            "search:resources"
+          ]
+        },
         "parameters": [
           {
-            "name": "identifier",
+            "name": "tenantId",
             "in": "path",
-            "description": "Array of identifiers used to search for resources.  Identifiers in the format 'system|value'.",
+            "description": "The ID of the tenant for which to retrieve resources",
             "required": true,
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "minItems": 1
+              "type": "string"
             }
           },
           {
@@ -147,18 +209,21 @@
             }
           },
           {
-            "name": "tenantMnemonic",
-            "in": "path",
-            "description": "The mnemonic that identifies the tenant",
+            "name": "identifier",
+            "in": "query",
+            "description": "Array of identifiers used to search for resources. Identifiers in the format 'system|value'.",
             "required": true,
+            "style": "form",
+            "explode": true,
             "schema": {
-              "type": "string"
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
             }
           }
         ],
-        "summary": "Returns a list of identifiers",
-        "description": "Returns all identifiers tied to a resource indicated by the given identifier",
-        "operationId": "getResourceIdentifiers",
         "responses": {
           "200": {
             "description": "Request processed successfully, identifiers returned",
@@ -166,16 +231,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/IdentifierSearchResponse"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An error occurred while attempting to find the identifiers",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
